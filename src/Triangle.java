@@ -20,8 +20,16 @@ public class Triangle {
     }
 
     private double[] calculateAngles() {
-
-        return null;
+        Vector a = new Vector(vertices[0], vertices[1]);
+        Vector b = new Vector(vertices[1], vertices[2]);
+        Vector c = new Vector(vertices[2], vertices[0]);
+        
+        double[] angs = new double[3];
+        
+        angs[0] = Vector.getAngle(a, b);
+        angs[1] = Vector.getAngle(b, c);
+        angs[2] = Vector.getAngle(c, a);
+        return angs;
     }
 
     public boolean isSimilar(Triangle triangle){
