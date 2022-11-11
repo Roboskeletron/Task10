@@ -1,6 +1,7 @@
+package task10;
+
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Triangle {
@@ -33,7 +34,15 @@ public class Triangle {
     }
 
     public boolean isSimilar(Triangle triangle){
-        return Arrays.equals(angles, triangle.angles);
+        double e = 10e-5;
+
+        for (int i = 0; i < angles.length; i++){
+            if (Math.abs(angles[i] - triangle.angles[i]) > e){
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public static List<List<Triangle>> getTable(List<Triangle> triangles){
@@ -46,6 +55,7 @@ public class Triangle {
                 continue;
 
             ArrayList<Triangle> similarTriangles = new ArrayList<>();
+            similarTriangles.add(triangle1);
 
             for (int j = i + 1; j < triangles.size(); j++){
                 var triangle2 = triangles.get(j);
@@ -69,16 +79,24 @@ public class Triangle {
             points.add(Point.parse(point_string));
         }
 
-        return  new Triangle((Point[]) points.toArray());
+        Point[] trianglePoints = new Point[points.size()];
+
+        for (int i = 0; i < points.size(); i++){
+            trianglePoints[i] = points.get(i);
+        }
+        return  new Triangle(trianglePoints);
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder("Triangle [ ");
         for (Point point : vertices){
+            builder.append("(");
             builder.append(point);
-            builder.append(";");
+            builder.append(") ");
         }
+
+        builder.append("] ");
 
         return builder.toString();
     }
