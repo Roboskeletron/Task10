@@ -1,9 +1,11 @@
+package task10;
+
 public class Vector {
     public final double x, y;
 
     public Vector(Point start, Point end){
-        x = start.x() - end.x();
-        y = start.y() - end.y();
+        x = end.x() - start.x();
+        y = end.y() - start.y();
     }
 
     public double length(){
