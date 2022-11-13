@@ -14,6 +14,6 @@ public class Main {
 
         var table = Triangle.getTable(triangles);
 
-        System.out.println(ArrayIO.saveTable(table, outputStream));
+        System.out.println(ArrayIO.saveTable(table, outputStream, true));
     }
 }
