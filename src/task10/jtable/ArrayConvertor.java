@@ -32,13 +32,14 @@ public class ArrayConvertor {
                 builder.append(val);
                 count++;
 
-                if (count >= 2)
+                if (count >= 2) {
                     builder.append("; ");
-                else {
-                    builder.append(" ");
                     count = 0;
                 }
+                else
+                    builder.append(" ");
             }
+            builder.deleteCharAt(builder.length() - 1);
             builder.append("\n");
         }
 
