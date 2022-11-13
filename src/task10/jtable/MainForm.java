@@ -8,7 +8,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
@@ -22,9 +21,10 @@ public class MainForm extends  JFrame {
     private JButton closeFileButton;
     private JButton getResultButton;
     private JButton saveResultButton;
-    private JLabel OutputLable;
+    private JLabel outputLabel;
 
     private List<List<Triangle>> result = null;
+    private final Vector<String> columnIdentifiers = new Vector<>(List.of(new String[]{"x", "y", "x", "y", "x", "y"}));
 
     public MainForm(){
         setContentPane(jpanel);
@@ -57,11 +57,14 @@ public class MainForm extends  JFrame {
         var data = ArrayConvertor.inputTableToString(inputModel);
 
         try {
-            result = Collections.singletonList(ArrayIO.getTriangles(
-                    new ByteArrayInputStream(data.getBytes(StandardCharsets.UTF_8)), ";"));
+            var triangles  = ArrayIO.getTriangles(
+                    new ByteArrayInputStream(data.getBytes(StandardCharsets.UTF_8)), ";");
+            result = Triangle.getTable(triangles);
             var table = ArrayIO.saveTable(result, null, false);
 
-            OutputLable.setText(table);
+            table = "<html>" + table.replaceAll("\n", "<br>") + "</html>";
+
+            outputLabel.setText(table);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -97,9 +100,7 @@ public class MainForm extends  JFrame {
 
             var model = (DefaultTableModel) inputTable.getModel();
 
-            Vector<String> names = new Vector<>(List.of(new String[]{"x", "y", "x", "y", "x", "y"}));
-
-            model.setDataVector(ArrayConvertor.trianglesToRow(triangles), names);
+            model.setDataVector(ArrayConvertor.trianglesToRow(triangles), columnIdentifiers);
             model.fireTableDataChanged();
         }
         catch (Exception e){
@@ -116,11 +117,17 @@ public class MainForm extends  JFrame {
     }
 
     private void addPointButtonClicked(ActionEvent actionEvent) {
-        Double[] points = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+        Vector<Double> points = new Vector<>(9);
+        Vector<Vector<Double>> rows = new Vector<>();
+        rows.add(points);
 
         var model = (DefaultTableModel) inputTable.getModel();
 
-        model.addRow(points);
+        if (model.getDataVector().size() > 0)
+            model.addRow(points);
+        else {
+            model.setDataVector(rows, columnIdentifiers);
+        }
 
         model.fireTableDataChanged();
     }
