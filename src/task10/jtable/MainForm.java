@@ -4,7 +4,6 @@ import task10.ArrayIO;
 import task10.Triangle;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -31,6 +30,8 @@ public class MainForm extends  JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         pack();
 
+        inputTable.setModel(new TableModel());
+
         addPointButton.addActionListener(this::addPointButtonClicked);
         deletePointButton.addActionListener(this::deletePointButtonClicked);
         openFileButton.addActionListener(this::openFileButtonClicked);
@@ -52,7 +53,7 @@ public class MainForm extends  JFrame {
     }
 
     private void getResultButtonClicked(ActionEvent actionEvent) {
-        var inputModel = (DefaultTableModel) inputTable.getModel();
+        var inputModel = (TableModel) inputTable.getModel();
 
         var data = ArrayConvertor.inputTableToString(inputModel);
 
@@ -71,7 +72,7 @@ public class MainForm extends  JFrame {
     }
 
     private void closeFileButtonClicked(ActionEvent actionEvent) {
-        var model = (DefaultTableModel) inputTable.getModel();
+        var model = (TableModel) inputTable.getModel();
 
         model.getDataVector().clear();
 
@@ -82,7 +83,7 @@ public class MainForm extends  JFrame {
         try{
             var stream = getFileStream(FileOutputStream.class);
 
-            var data  = ArrayConvertor.inputTableToString((DefaultTableModel) inputTable.getModel());
+            var data  = ArrayConvertor.inputTableToString((TableModel) inputTable.getModel());
 
             stream.write(data.getBytes(StandardCharsets.UTF_8));
 
@@ -98,7 +99,7 @@ public class MainForm extends  JFrame {
             var stream = getFileStream(FileInputStream.class);
             var triangles = ArrayIO.getTriangles(stream, ";");
 
-            var model = (DefaultTableModel) inputTable.getModel();
+            var model = (TableModel) inputTable.getModel();
 
             model.setDataVector(ArrayConvertor.trianglesToRow(triangles), columnIdentifiers);
             model.fireTableDataChanged();
@@ -109,7 +110,7 @@ public class MainForm extends  JFrame {
     }
 
     private void deletePointButtonClicked(ActionEvent actionEvent) {
-        var model = (DefaultTableModel) inputTable.getModel();
+        var model = (TableModel) inputTable.getModel();
 
         model.removeRow(model.getRowCount() - 1);
 
@@ -121,7 +122,7 @@ public class MainForm extends  JFrame {
         Vector<Vector<Double>> rows = new Vector<>();
         rows.add(points);
 
-        var model = (DefaultTableModel) inputTable.getModel();
+        var model = (TableModel) inputTable.getModel();
 
         if (model.getDataVector().size() > 0)
             model.addRow(points);
