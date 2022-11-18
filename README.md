@@ -9,7 +9,7 @@ Triangle[][], но это менее удобно).
 ## Console arguments
 Console app arguments format: 
 ``` bash
-java task10.console <input file> <output file>
+java task10.console.Main <input file> <output file>
 ```
 Where `<input file>` must exist and `<output file>` will be created if not exist
 ## Input file
